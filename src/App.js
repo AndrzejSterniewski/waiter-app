@@ -8,12 +8,14 @@ import Header from "./components/views/Header";
 import Home from './components/pages/Home';
 import TablePage from "./components/pages/TablePage";
 import NotFound from "./components/pages/NotFound";
+import { fetchStatuses } from "./redux/statusesRedux";
 
 function App() {
 
   const dispatch = useDispatch();
 
   useEffect(() => dispatch(fetchTables()), [dispatch]);
+  useEffect(() => dispatch(fetchStatuses()), [dispatch]);
 
   return (
     <Container>
