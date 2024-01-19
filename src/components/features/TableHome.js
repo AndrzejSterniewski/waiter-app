@@ -6,7 +6,6 @@ import Loader from "../views/Loader";
 
 const TableHome = () => {
 
-    // const tables = useSelector(getTableById(table => table.id));
     const tables = useSelector(getAllTables);
 
     return (
