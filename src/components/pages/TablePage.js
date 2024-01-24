@@ -15,6 +15,7 @@ const TablePage = (props) => {
     const [peopleAmount, setPeopleAmount] = useState(props.peopleAmount || '');
     const [maxPeopleAmount, setMaxPeopleAmount] = useState(props.maxPeopleAmount || '');
     const [bill, setBill] = useState(props.bill || '');
+    const [statusChanged, setStatusChanged] = useState(false);
 
     useEffect(() => {
         if (maxPeopleAmount > 10)
@@ -32,6 +33,14 @@ const TablePage = (props) => {
             setBill(0);
     }, [bill]);
 
+    useEffect(() => {
+        if (status === 'Cleaning' || status === 'Free')
+            setPeopleAmount(0);
+        if (status === 'Busy' && (status !== props.status || statusChanged))
+            setBill(0);
+        setStatusChanged(true);
+    }, [status])
+
     const { register, handleSubmit: validate, formState: { errors } } = useForm();
 
     const dispatch = useDispatch();
@@ -42,7 +51,7 @@ const TablePage = (props) => {
     const table = useSelector(state => getTableById(state, id))
     const statuses = useSelector(getAllStatuses);
 
-    useEffect (() => {
+    useEffect(() => {
         if (table) {
             setStatus(table.status);
             setBill(table.bill);
@@ -64,7 +73,7 @@ const TablePage = (props) => {
 
                 <Form.Group className="mb-3 d-flex justify-content-between align-items-center" >
                     <FormLabel className="fw-bold me-3">Status: </FormLabel>
-                    {status}
+                    {/* {status} */}
                     <Form.Select value={status} onChange={e => setStatus(e.target.value)}>
                         {statuses.map((status) => (
                             <option key={status}>
@@ -77,13 +86,15 @@ const TablePage = (props) => {
                 <Form.Group className="mb-3 d-flex justify-content-between align-items-center" style={{ width: '100%' }}>
                     <FormLabel className="fw-bold me-3">People: </FormLabel>
                     <Form.Control
-                        {...register("peopleAmount", { required: true, min: 1, max: 10 })}
+                        {...register("peopleAmount", { min: 0, max: 10 })}
                         type="number" value={peopleAmount}
                         onChange={e => setPeopleAmount(e.target.value)} /> /
+                    {/* {errors.peopleAmount && JSON.stringify(errors.peopleAmount)} */}
                     <Form.Control
-                        {...register("maxPeopleAmount", { required: true, min: 1, max: 10 })}
+                        {...register("maxPeopleAmount", { min: 1, max: 10 })}
                         type="number" value={maxPeopleAmount}
                         onChange={e => setMaxPeopleAmount(e.target.value)} />
+                    {/* {errors.maxPeopleAmount && console.log(errors.maxPeopleAmount)} */}
                     {/* {errors.peopleAmount && <small className="d-block form-text text-danger mt-2">Number of people is incorrect (min is 1, max is 10)</small>}
                     {errors.maxPeopleAmount && <small className="d-block form-text text-danger mt-2">Number of max people is incorrect (min is 1, max is 10)</small>} */}
                 </Form.Group>
