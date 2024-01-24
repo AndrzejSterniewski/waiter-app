@@ -34,9 +34,10 @@ const TablePage = (props) => {
     }, [bill]);
 
     useEffect(() => {
+        if (!table) return;
         if (status === 'Cleaning' || status === 'Free')
             setPeopleAmount(0);
-        if (status === 'Busy' && (status !== props.status || statusChanged))
+        if (status === 'Busy' && (status !== table.status || statusChanged))
             setBill(0);
         setStatusChanged(true);
     }, [status])
@@ -57,6 +58,7 @@ const TablePage = (props) => {
             setBill(table.bill);
             setPeopleAmount(table.peopleAmount);
             setMaxPeopleAmount(table.maxPeopleAmount);
+            setStatusChanged(false);
         }
     }, [table]);
 
@@ -95,8 +97,7 @@ const TablePage = (props) => {
                         type="number" value={maxPeopleAmount}
                         onChange={e => setMaxPeopleAmount(e.target.value)} />
                     {/* {errors.maxPeopleAmount && console.log(errors.maxPeopleAmount)} */}
-                    {/* {errors.peopleAmount && <small className="d-block form-text text-danger mt-2">Number of people is incorrect (min is 1, max is 10)</small>}
-                    {errors.maxPeopleAmount && <small className="d-block form-text text-danger mt-2">Number of max people is incorrect (min is 1, max is 10)</small>} */}
+                    {/* {errors.maxPeopleAmount && <small className="d-block form-text text-danger mt-2">Number of max people is incorrect (min is 1, max is 10)</small>} */}
                 </Form.Group>
 
                 {(status === "Busy" && <Form.Group className="mb-3 d-flex justify-content-between align-items-center" style={{ width: '50%' }}>
