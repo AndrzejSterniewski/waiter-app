@@ -32,11 +32,10 @@ export const updateTableRequest = (updatedTable) => {
             body: JSON.stringify(updatedTable),
         };
         // fetch(`http://localhost:3131/tables/${updatedTable.id}`, options)
-        fetch(`${API_URL} + /tables/${updatedTable.id}`, options)
+        fetch(API_URL + '/tables/' + updatedTable.id, options)
             .then(() => dispatch(updateTable(updatedTable)))
     }
 };
-
 const tablesReducer = (statePart = [], action) => {
     switch (action.type) {
         case UPDATE_TABLES:
